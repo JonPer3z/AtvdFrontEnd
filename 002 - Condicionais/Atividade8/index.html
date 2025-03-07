@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/script.js" defer></script>
+    <title>Calculadora</title>
+</head>
+
+<body>
+    <label for="number1Input">Digite o primeiro número:</label>
+    <input type="number" id="number1Input" placeholder="Digite aqui">
+    <br><br>
+
+    <label for="number2Input">Digite o segundo número:</label>
+    <input type="number" id="number2Input" placeholder="Digite aqui">
+    <br><br>
+
+    <h1>Escolha sua operação:</h1>
+    <p>1 - Média entre os números digitados</p>
+    <p>2 - Diferença entre os números</p>
+    <p>3 - Produto entre os números digitados</p>
+    <p>4 - Divisão do primeiro pelo segundo</p>
+
+    <label for="operacao">Número da operação:</label>
+    <input type="number" id="operacao" placeholder="Digite 1, 2, 3 ou 4">
+    <br><br>
+
+    <button onclick="resultado()">Exibir Resultado</button>
+    <br>
+    <br>
+    <p id="saida"></p>
+</body>
+
+</html>
