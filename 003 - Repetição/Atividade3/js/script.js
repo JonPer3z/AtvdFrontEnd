@@ -36,4 +36,6 @@ function VerificarNumeros(){
     }
 }
 
-function exibirResultado() // Exibir resultado pares e impares
+function exibirResultado(elementId,mensagem){
+    document.getElementById(elementId).innerText = mensagem;
+} // Exibir resultado pares e impares
