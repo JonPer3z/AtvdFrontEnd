@@ -23,7 +23,6 @@ const clickNoBotao = (descontoInput, precoInput) => {
             let desconto = elementDesconto;
             let preco = elementPreco;
             let valorFinal;
-            console.log(desconto, typeof desconto)
 
             desconto = desconto === 0 || null ? 0.1 : desconto / 100;
 
