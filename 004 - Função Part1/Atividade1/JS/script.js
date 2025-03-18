@@ -23,7 +23,7 @@ function exibirOperacao() {
   const elementInput2 = document.getElementById('input2');
 
   let pegarIndex = document.querySelector('#escolhaOperacao');
-  //prettier-ignore
+  
   if ( (pegarIndex instanceof HTMLSelectElement) && (elementInput1 instanceof HTMLInputElement) && (elementInput2 instanceof HTMLInputElement)) {
     const number1 = parseFloat(elementInput1.value);
     const number2 = parseFloat(elementInput2.value);
