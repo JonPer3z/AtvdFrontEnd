@@ -2,17 +2,32 @@ const arrayTarefas = [];
 
 function cadastrarTarefa(entradaTarefa) {
     if (entradaTarefa) {
-        arrayTarefas.push(entradaTarefa);
-        exibirConteudo();
+        if (arrayTarefas.includes(entradaTarefa) === false) {
+            //if(!arrayTarefas.includes(entradaTarefa)){
+            arrayTarefas.push(entradaTarefa);
+            exibirConteudo();
+        } else {
+            alert('Tarefa já cadastrada.');
+        }
     } else {
         alert('Por favor, insira um valor válido.');
     }
 }
 
 function exibirConteudo() {
-    let saida = document.getElementById('resultado');
-    if (saida instanceof HTMLParagraphElement) {
-        saida.textContent = arrayTarefas.join(', ');
+
+    let item = document.getElementById('item')
+
+    if (item instanceof HTMLDivElement) {
+
+        while (item.firstChild) {
+            item.removeChild(item.firstChild)
+        }
+        arrayTarefas.forEach(visualizador => {
+            let p = document.createElement('p')
+            p.textContent = visualizador
+            item.appendChild(p)
+        });
     }
 }
 
@@ -27,7 +42,9 @@ function removerUltimaTarefa() {
 }
 
 function removerTarefaEscolhida(tarefa) {
-    let indice = arrayTarefas.indexOf(tarefa);
+    let input = tarefa.value
+    let indice = arrayTarefas.indexOf(input);
+    tarefa.value = "";
     if (indice != -1) {
         arrayTarefas.splice(indice, 1)
         exibirConteudo()
@@ -61,7 +78,7 @@ const configurarCadastroDeTarefas = () => {
     }
     if ((botaoRemoverTarefaEscolhida instanceof HTMLButtonElement) && (removeTarefa instanceof HTMLInputElement)) {
         botaoRemoverTarefaEscolhida.addEventListener('click', () => {
-            removerTarefaEscolhida(removeTarefa.value);
+            removerTarefaEscolhida(removeTarefa);
         })
     }
 };
