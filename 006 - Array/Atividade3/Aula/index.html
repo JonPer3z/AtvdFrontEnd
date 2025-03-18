@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="Js/script.js"></script>
-</head>
-<body>
+<html lang="pt-br">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="Js/script.js" defer></script>
+    <title>Gerenciador de Tarefas</title>
+</head>
+
+<body>
+    <label for="tarefa">Tarefa: </label>
+    <input type="text" id="tarefa" placeholder="Informe uma tarefa" />
+    <button id="cadastrarTarefaBtn">Cadastrar</button>
+    <button id="removerTarefaBtn">Remover Último</button>
+    <br>
+    <br>
+    <label for="tarefaRemovida">Tarefa: </label>
+    <input type="text" id="tarefaRemovida" placeholder="Remova a tarefa" />
+    <button id="removerTarefaEscolhidaBtn">Remover</button>
+    <ul id="item">
+    </ul>
 </body>
+
 </html>
