@@ -8,6 +8,7 @@ export class Principal {
         this.calcularMediaButton = document.getElementById('calcularMedia');
         this.resultado = document.getElementById('resultado');
         
+        
         this.aluno = null;
 
         this.adicionarNotaButton.addEventListener('click', () => {
