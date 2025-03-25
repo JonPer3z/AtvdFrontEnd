@@ -21,27 +21,30 @@ export class Principal {
 
     
     adicionarNota() {
+        if((this.notaInput instanceof HTMLInputElement) && (this.nomeInput instanceof HTMLInputElement)){
+            const nome = this.nomeInput.value.trim();
+            const nota = parseFloat(this.notaInput.value);
+    
+            if (!this.aluno && nome) {
+                this.aluno = new Aluno(nome);
+            } else if (!this.aluno) {
+                alert("Por favor, digite o nome do aluno.");
+                return;
+            }
+    
+            if (isNaN(nota)) {
+                alert("Por favor, insira uma nota válida.");
+                return;
+            }
+    
+            this.aluno.adicionarNota(nota);
+    
+    
+            this.notaInput.value = '';
+            alert("Nota adicionada com sucesso!");
 
-        const nome = this.nomeInput.value.trim();
-        const nota = parseFloat(this.notaInput.value);
-
-        if (!this.aluno && nome) {
-            this.aluno = new Aluno(nome);
-        } else if (!this.aluno) {
-            alert("Por favor, digite o nome do aluno.");
-            return;
         }
 
-        if (isNaN(nota)) {
-            alert("Por favor, insira uma nota válida.");
-            return;
-        }
-
-        this.aluno.adicionarNota(nota);
-
-
-        this.notaInput.value = '';
-        alert("Nota adicionada com sucesso!");
     }
 
 
