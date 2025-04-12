@@ -24,10 +24,15 @@
             <input type="number" id="item-preco" placeholder="Preço unitário" min="0" step="0.01">
             <button onclick="adicionarItem()">Adicionar Item</button>
         </div>
+        <!-- Formulário para remover itens -->
+        <div>
+            <input type="text" id="remover-nome" placeholder="Nome do item a remover">
+            <button onclick="removerItem()">Remover Item</button>
+        </div>
         <!-- Lista de itens -->
         <div id="itens-pedido"></div>
         <!-- Total do pedido -->
-        <h3>Total: R$ <span id="total-pedido">0.00</span></h3>
+        <h3>Valor Atual da Compra: R$ <span id="total-pedido">0.00</span></h3>
         <!-- Botão para finalizar -->
         <button onclick="finalizarPedido()">Finalizar Pedido</button>
     </div>

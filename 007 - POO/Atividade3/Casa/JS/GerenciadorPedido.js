@@ -9,7 +9,19 @@ class GerenciadorPedidos {
         this.produtos.push(produto);
     }
 
-    // Método para calcular o total do pedido
+    // Método para remover um produto pelo nome
+    removerProduto(nome) {
+        // Procura o índice do produto com o nome fornecido
+        const index = this.produtos.findIndex(produto => produto.getNome().toLowerCase() === nome.toLowerCase());
+        // Se encontrou (índice não é -1), remove o produto
+        if (index !== -1) {
+            this.produtos.splice(index, 1);
+            return true; // Indica que removeu com sucesso
+        }
+        return false; // Indica que não encontrou o produto
+    }
+
+    // Método para calcular o valor atual da compra
     calcularTotal() {
         let total = 0;
         // Soma o subtotal de cada produto

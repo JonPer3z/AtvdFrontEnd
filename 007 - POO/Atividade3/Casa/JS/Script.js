@@ -1,19 +1,16 @@
 // Cria uma instância do GerenciadorPedidos
 let gerenciador = new GerenciadorPedidos();
 
-// Função para adicionar um item (chamada pelo botão no HTML)
+// Função para adicionar um item
 function adicionarItem() {
-    // Obtém os valores dos campos
     let nome = document.getElementById("item-nome").value;
     let quantidade = parseInt(document.getElementById("item-quantidade").value);
     let preco = parseFloat(document.getElementById("item-preco").value);
 
     try {
-        // Cria um novo produto (os setters validarão os dados)
         let produto = new Produto(nome, quantidade, preco);
-        // Adiciona ao gerenciador
         gerenciador.adicionarProduto(produto);
-        // Atualiza a interface
+        // Atualiza a lista e o valor atual na interface
         document.getElementById("itens-pedido").innerHTML = gerenciador.listarProdutos();
         document.getElementById("total-pedido").innerText = gerenciador.calcularTotal();
         // Limpa os campos
@@ -21,17 +18,35 @@ function adicionarItem() {
         document.getElementById("item-quantidade").value = "";
         document.getElementById("item-preco").value = "";
     } catch (error) {
-        // Exibe mensagem de erro caso os setters rejeitem os valores
         alert(error.message);
+    }
+}
+
+// Função para remover um item
+function removerItem() {
+    let nome = document.getElementById("remover-nome").value;
+
+    if (nome && nome.trim() !== "") {
+        // Tenta remover o produto
+        const removido = gerenciador.removerProduto(nome);
+        if (removido) {
+            // Atualiza a lista e o valor atual na interface
+            document.getElementById("itens-pedido").innerHTML = gerenciador.listarProdutos();
+            document.getElementById("total-pedido").innerText = gerenciador.calcularTotal();
+            document.getElementById("remover-nome").value = "";
+            alert("Item removido com sucesso!");
+        } else {
+            alert("Item não encontrado!");
+        }
+    } else {
+        alert("Digite o nome do item para remover!");
     }
 }
 
 // Função para finalizar o pedido
 function finalizarPedido() {
-    // Verifica se há produtos
     if (gerenciador.produtos.length > 0) {
         alert(`Pedido finalizado! Total: R$ ${gerenciador.calcularTotal()}`);
-        // Limpa o pedido
         gerenciador.limparPedido();
         // Atualiza a interface
         document.getElementById("itens-pedido").innerHTML = "";
