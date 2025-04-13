@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Estacionamento</title>
+    <style>
+        /* Estilização básica para a interface */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        input, button { margin: 5px; padding: 5px; }
+        #lista-veiculos { margin-top: 20px; }
+    </style>
+        <script src="JS/veiculo.js"></script>
+        <script src="JS/GerenciadorEstacionamento.js"></script>
+        <script src="JS/Script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Controle de Estacionamento</h1>
+        <!-- Formulário para registrar veículo -->
+        <div>
+            <input type="text" id="veiculo-placa" placeholder="Placa (ex.: ABC1234)">
+            <input type="text" id="veiculo-modelo" placeholder="Modelo">
+            <input type="number" id="veiculo-tempo" placeholder="Tempo (horas)" min="0" step="0.1">
+            <button onclick="registrarVeiculo()">Registrar Veículo</button>
+        </div>
+        <!-- Formulário para filtrar/excluir veículo -->
+        <div>
+            <input type="text" id="filtro-placa" placeholder="Placa para filtrar/excluir">
+            <button onclick="filtrarVeiculo()">Filtrar Veículo</button>
+            <button onclick="excluirVeiculo()">Excluir Veículo</button>
+        </div>
+        <!-- Área para exibir a lista de veículos -->
+        <div id="lista-veiculos"></div>
+    </div>
+
+</body>
+</html>
