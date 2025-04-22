@@ -6,7 +6,7 @@ function configurar() {
 
     if ((nomeInput instanceof HTMLInputElement) && (idadeInput instanceof HTMLInputElement) && (valorInput instanceof HTMLInputElement) && (btnVerificar instanceof HTMLButtonElement)) {
         btnVerificar.addEventListener("click", () => {
-            let nome = nomeInput.value;
+            let nome = nomeInput.value.trim();
             let idade = parseInt(idadeInput.value);
             let valor = parseFloat(valorInput.value);
             verificarEmprestimo(nome, idade, valor);
