@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown de Frutas com Imagem (Online)</title>
+    <style>
+        /* Estilo básico para a imagem não ficar gigante na página */
+        #imagemFruta {
+            max-width: 250px; /* Largura máxima da imagem */
+            height: auto;    /* Mantém a proporção da altura */
+            display: block;  /* Para a imagem ocupar sua própria linha */
+            margin-top: 20px; /* Espaço acima da imagem */
+            border: 1px solid #ccc; /* Borda leve para destacar a imagem */
+            border-radius: 8px; /* Cantos arredondados */
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Sombra suave */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Selecione sua Fruta Preferida</h1>
+    <p>Escolha uma fruta na lista e veja a imagem diretamente da internet!</p>
+    
+    <select id="selectFrutas">
+        <option value="" disabled selected>Selecione uma fruta...</option>
+    </select>
+    
+    <div id="exibicaoFruta">
+        <p id="frutaEscolhidaTexto"></p>
+        
+        <img id="imagemFruta" src="" alt="Aguardando seleção da fruta.">
+    </div>
+
+    <script src="JS/Script.js"></script> 
+    
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Palavras</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            color: #343a40;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #495057;
+        }
+        textarea {
+            width: calc(100% - 22px); /* Ajusta para padding e borda */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box; /* Inclui padding e borda na largura total */
+            font-size: 16px;
+            resize: vertical; /* Permite redimensionar verticalmente */
+            min-height: 100px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745; /* Verde para o botão de ação */
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px); /* Pequeno efeito ao passar o mouse */
+        }
+        .resultado-box {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            background-color: #eaf6ff; /* Azul claro para o fundo */
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .resultado-box p {
+            margin: 0;
+            font-size: 1.5em; /* Fonte maior para o resultado */
+            color: #0056b3;
+            font-weight: bold;
+        }
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none; /* Inicia oculto */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Contador de Palavras</h1>
+
+        <label for="textoInput">Digite seu texto aqui:</label>
+        <textarea id="textoInput" placeholder="Ex: Olá mundo! Este é um exemplo de texto para contar palavras."></textarea>
+
+        <button id="btnContarPalavras">Contar Palavras</button>
+
+        <p id="errorMessage" class="error-message"></p>
+
+        <div class="resultado-box">
+            <p id="resultado">Número de palavras: 0</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Definição da Classe ContadorPalavras
+        class ContadorPalavras {
+            constructor(texto) {
+                // Ao instanciar a classe, o texto é armazenado no atributo 'this.texto'.
+                // Remove espaços em branco do início e fim do texto.
+                this.texto = texto.trim(); 
+            }
+
+            // Método para contar as palavras na string.
+            contarPalavras() {
+                // Se o texto estiver vazio após o trim(), significa que não há palavras.
+                if (this.texto === '') {
+                    return 0;
+                }
+
+                // Divide a string em um array de palavras usando um ou mais espaços como separador.
+                // A regex /\s+/ garante que múltiplos espaços (ex: "olá   mundo") sejam tratados como um só separador.
+                const palavras = this.texto.split(/\s+/);
+                
+                // Retorna o número de elementos (palavras) no array.
+                return palavras.length;
+            }
+        }
+
+        // --- Acesso aos Elementos HTML ---
+        const textoInput = document.getElementById('textoInput');
+        const btnContarPalavras = document.getElementById('btnContarPalavras');
+        const resultadoParagrafo = document.getElementById('resultado');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Função para exibir mensagens de erro
+        function showErrorMessage(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            // Esconde a mensagem após alguns segundos
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // --- Event Listener para o Botão ---
+        btnContarPalavras.addEventListener('click', () => {
+            const textoDigitado = textoInput.value;
+
+            // Tratamento de exceção / validação: Se o campo estiver vazio.
+            if (textoDigitado.trim() === '') {
+                showErrorMessage('Por favor, digite algum texto para contar as palavras.');
+                resultadoParagrafo.textContent = 'Número de palavras: 0';
+                return; // Sai da função para não processar texto vazio
+            }
+
+            // 2. Instanciação da Classe ContadorPalavras
+            // Cria um novo objeto da classe, passando o texto digitado como argumento.
+            const meuContador = new ContadorPalavras(textoDigitado);
+
+            // 3. Chamada do Método contarPalavras() e exibição do resultado
+            const numPalavras = meuContador.contarPalavras();
+            resultadoParagrafo.textContent = `Número de palavras: ${numPalavras}`;
+        });
+
+        // Opcional: Limpar o resultado e mensagens ao digitar novamente
+        textoInput.addEventListener('input', () => {
+            resultadoParagrafo.textContent = 'Número de palavras: 0'; // Reseta a contagem
+            errorMessage.style.display = 'none'; // Esconde a mensagem de erro
+        });
+    </script>
+</body>
+</html>

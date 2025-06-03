@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Registro de Alunos</title>
+    <style>
+        /* Estilos básicos para uma interface organizada */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #e9eef2;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        div.section {
+            background-color: #ffffff;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="number"], input[type="email"], textarea {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745; /* Verde para adicionar/salvar */
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        button:hover { background-color: #218838; }
+        .edit-button { background-color: #ffc107; color: #333; }
+        .edit-button:hover { background-color: #e0a800; }
+        .delete-button { background-color: #dc3545; }
+        .delete-button:hover { background-color: #c82333; }
+        .cancel-button { background-color: #6c757d; }
+        .cancel-button:hover { background-color: #5a6268; }
+
+        .student-list {
+            list-style: none;
+            padding: 0;
+        }
+        .student-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e6ea;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .student-info {
+            flex-grow: 1;
+        }
+        .student-info strong {
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+        .student-actions {
+            margin-left: 15px;
+            display: flex;
+            gap: 8px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        .info-message {
+            color: #004085;
+            background-color: #cce5ff;
+            border: 1px solid #b8daff;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sistema de Registro de Alunos</h1>
+
+    <div id="messageDisplay" class="message"></div>
+
+    <div class="section">
+        <h2 id="formTitle">Adicionar Novo Aluno</h2>
+        <label for="studentName">Nome:</label>
+        <input type="text" id="studentName" placeholder="Nome Completo do Aluno">
+
+        <label for="studentAge">Idade:</label>
+        <input type="number" id="studentAge" placeholder="Idade" min="0" max="100">
+
+        <label for="studentEnrollment">Número de Matrícula:</label>
+        <input type="text" id="studentEnrollment" placeholder="Ex: 2024001">
+
+        <label for="studentGrade1">Nota da Disciplina 1 (0-10):</label>
+        <input type="number" id="studentGrade1" placeholder="Nota 1" min="0" max="10" step="0.1">
+
+        <label for="studentGrade2">Nota da Disciplina 2 (0-10):</label>
+        <input type="number" id="studentGrade2" placeholder="Nota 2" min="0" max="10" step="0.1">
+        
+        <label for="studentObservations">Observações (opcional):</label>
+        <textarea id="studentObservations" placeholder="Qualquer observação relevante sobre o aluno..." rows="3"></textarea>
+        
+        <input type="hidden" id="originalEnrollment"> 
+
+        <button id="btnAddUpdateStudent">Adicionar Aluno</button>
+        <button id="btnCancelEdit" class="cancel-button hidden">Cancelar Edição</button>
+    </div>
+
+    <div class="section">
+        <h2>Alunos Cadastrados</h2>
+        <ul id="studentList" class="student-list">
+            <p id="noStudentsMessage">Nenhum aluno cadastrado ainda.</p>
+        </ul>
+    </div>
+
+    <script src="JS/aluno.js"></script> 
+    <script src="JS/escola.js"></script>
+    <script src="JS/main.js"></script>
+    
+</body>
+</html>

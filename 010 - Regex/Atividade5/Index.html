@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de E-mail Personalizado</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none; /* Inicia oculto */
+        }
+        #resultado.valido {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        #resultado.invalido {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .requirements {
+            margin-top: 20px;
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .requirements ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 0;
+        }
+        .requirements li {
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Validador de E-mail Personalizado</h1>
+
+        <label for="emailInput">Digite seu endereço de e-mail:</label>
+        <input type="text" id="emailInput" placeholder="Ex: seu.nome@gmail.com.br">
+
+        <button id="btnValidar">Validar E-mail</button>
+
+        <p id="resultado"></p>
+
+        <div class="requirements">
+            <h3>Regras de Validação:</h3>
+            <ul>
+                <li>Formato geral: <code>nome@dominio.tld</code></li>
+                <li>O nome (antes do '@') pode ter letras, números, pontos, hífens e underscores.</li>
+                <li>Domínios aceitos: <code>gmail</code>, <code>hotmail</code>, <code>outlook</code>, <code>yahoo</code>.</li>
+                <li>TLDs aceitos: <code>com</code>, <code>com.br</code>, <code>org</code>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Regex para a parte do nome de usuário (antes do @) e estrutura geral.
+        // Permite letras, números, . _ -
+        // Garante que não começa/termina com . _ - e não tem ._ ou _. ou -- etc.
+        // Simplificada para a parte do nome: Começa com alfanumérico, seguido por zero ou mais
+        // grupos de (ponto/under/hífen + alfanumérico)
+        const regexNomeUsuario = /^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*$/;
+
+        // Lista de domínios aceitos
+        const dominiosAceitos = ['gmail', 'hotmail', 'outlook', 'yahoo'];
+
+        // Lista de TLDs aceitos (ordenados do mais longo para o mais curto para evitar problemas com endsWith)
+        const tldsAceitos = ['com.br', 'com', 'org']; 
+        // Colocar 'com.br' antes de 'com' é importante para que endsWith identifique 'com.br' corretamente primeiro.
+        // Se 'com' viesse antes, 'com.br' seria validado como terminando em 'com', o que não é o correto.
+
+        // Acessa os elementos HTML
+        const emailInput = document.getElementById('emailInput');
+        const btnValidar = document.getElementById('btnValidar');
+        const resultadoParagrafo = document.getElementById('resultado');
+
+        // Função para validar o e-mail
+        function validarEmail(email) {
+            email = email.toLowerCase(); // Converte para minúsculas para validação de domínio/TLD
+
+            // 1. Verificar a presença de '@' e '.'
+            const partes = email.split('@');
+            if (partes.length !== 2) {
+                return { valido: false, mensagem: 'O e-mail deve conter exatamente um "@".' };
+            }
+
+            const nomeUsuario = partes[0];
+            const restoDominio = partes[1]; // Ex: "gmail.com" ou "hotmail.com.br"
+
+            // 2. Validar o nome de usuário (antes do @) usando a regex
+            if (!regexNomeUsuario.test(nomeUsuario)) {
+                return { valido: false, mensagem: 'Nome de usuário inválido. Pode conter letras, números, ._- e não iniciar/terminar com eles.' };
+            }
+            
+            // 3. Separar domínio e TLD
+            // Encontra a posição do último ponto para separar o TLD
+            const ultimoPontoIndex = restoDominio.lastIndexOf('.');
+            if (ultimoPontoIndex === -1 || ultimoPontoIndex === 0 || ultimoPontoIndex === restoDominio.length - 1) {
+                return { valido: false, mensagem: 'Formato de domínio inválido (ex: falta o TLD ou ponto).' };
+            }
+
+            const dominio = restoDominio.substring(0, ultimoPontoIndex); // Ex: "gmail"
+            const tldCompleto = restoDominio.substring(ultimoPontoIndex + 1); // Ex: "com" ou "com.br" (aqui é 'com' ou 'com.br' dependendo)
+
+            // Vamos ajustar a lógica para o TLD completo ser 'com.br'
+            let tldEncontrado = '';
+            for (const tld of tldsAceitos) {
+                // Verifica se o resto do domínio termina com o TLD aceito
+                // E se o caractere anterior ao TLD é um ponto (para separar o domínio do TLD)
+                if (restoDominio.endsWith(`.${tld}`)) {
+                    tldEncontrado = tld;
+                    break;
+                }
+            }
+
+            if (!tldEncontrado) {
+                return { valido: false, mensagem: `TLD (".${tldCompleto}") não permitido. TLDs aceitos: ${tldsAceitos.join(', ')}.` };
+            }
+
+            // O domínio real é o que sobra depois de remover o TLD e o ponto.
+            // Ex: "gmail.com.br" -> dominio = "gmail"
+            // Ex: "hotmail.com"  -> dominio = "hotmail"
+            const dominioFinal = restoDominio.substring(0, restoDominio.length - (tldEncontrado.length + 1));
+
+
+            // 4. Validar o domínio (gmail, hotmail, outlook, yahoo)
+            if (!dominiosAceitos.includes(dominioFinal)) {
+                return { valido: false, mensagem: `Domínio ("${dominioFinal}") não permitido. Domínios aceitos: ${dominiosAceitos.join(', ')}.` };
+            }
+
+            // Se tudo passou, o e-mail é válido
+            return { valido: true, mensagem: 'E-mail válido!' };
+        }
+
+        // --- Event Listener para o Botão ---
+        btnValidar.addEventListener('click', () => {
+            const emailDigitado = emailInput.value.trim();
+
+            if (emailDigitado === '') {
+                resultadoParagrafo.textContent = 'Por favor, digite um endereço de e-mail.';
+                resultadoParagrafo.className = 'invalido';
+                resultadoParagrafo.style.display = 'block';
+                return;
+            }
+
+            const resultado = validarEmail(emailDigitado);
+
+            if (resultado.valido) {
+                resultadoParagrafo.textContent = resultado.mensagem;
+                resultadoParagrafo.className = 'valido';
+            } else {
+                resultadoParagrafo.textContent = resultado.mensagem;
+                resultadoParagrafo.className = 'invalido';
+            }
+            resultadoParagrafo.style.display = 'block';
+        });
+
+        // Opcional: Esconder o resultado ao digitar novamente
+        emailInput.addEventListener('input', () => {
+            resultadoParagrafo.style.display = 'none';
+            resultadoParagrafo.textContent = '';
+        });
+    </script>
+</body>
+</html>

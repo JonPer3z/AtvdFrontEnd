@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de Telefone Brasileiro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            text-align: center;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none; /* Inicia oculto */
+        }
+        #resultado.valido {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        #resultado.invalido {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .examples {
+            margin-top: 20px;
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .examples ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 0;
+        }
+        .examples li {
+            margin-bottom: 5px;
+            font-size: 0.95em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Validador de Telefone Brasileiro</h1>
+
+        <label for="telefoneInput">Digite o número de telefone:</label>
+        <input type="text" id="telefoneInput" placeholder="Ex: (11) 98765-4321 ou +55 (21) 1234-5678">
+
+        <button id="btnValidar">Validar Telefone</button>
+
+        <p id="resultado"></p>
+
+        <div class="examples">
+            <h3>Formatos Válidos:</h3>
+            <ul>
+                <li><code>(XX) XXXXX-XXXX</code> (9 dígitos, com hífen. Ex: `(11) 98765-4321`)</li>
+                <li><code>(XX) XXXX-XXXX</code> (8 dígitos, com hífen. Ex: `(11) 1234-5678`)</li>
+                <li><code>(XX) XXXXXXXXX</code> (9 dígitos, sem hífen. Ex: `(11) 987654321`)</li>
+                <li><code>(XX) XXXXXXXX</code> (8 dígitos, sem hífen. Ex: `(11) 12345678`)</li>
+                <li>Com prefixo internacional `+55` (Ex: `+55 (11) 98765-4321`)</li>
+                <li>Com ou sem espaço entre o `+55` e o parênteses, e entre os parênteses e o número.</li>
+            </ul>
+            <h3>Formatos Inválidos:</h3>
+            <ul>
+                <li><code>XX 91234-5678</code> (sem parênteses no DDD)</li>
+                <li><code>(16)12345678</code> (sem espaço opcional, mas o regex acima aceita isso) - *Obs: O RegEx atual aceita isso, se quiser um espaço obrigatório, mude `\s?` para `\s`.*</li>
+                <li><code>+55-16-1234-5678</code> (hífen em vez de espaço)</li>
+                <li><code>(16) 1234567</code> (menos de 8 dígitos)</li>
+                <li><code>(16) 1234567890</code> (mais de 9 dígitos)</li>
+                <li><code>(16) 123-45678</code> (hífen em posição errada para 9 dígitos)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // A expressão regular para validar números de telefone brasileiros
+        // Permite prefixo +55 opcional, DDD entre parênteses, espaço opcional,
+        // e números de 8 ou 9 dígitos com ou sem hífen.
+        const regexTelefone = /^(?:\+55\s?)?\(\d{2}\)\s?(?:\d{4}-\d{4}|\d{5}-\d{4}|\d{8}|\d{9})$/;
+
+        // Acessa os elementos HTML
+        const telefoneInput = document.getElementById('telefoneInput');
+        const btnValidar = document.getElementById('btnValidar');
+        const resultadoParagrafo = document.getElementById('resultado');
+
+        // Adiciona um ouvinte de evento para o clique do botão
+        btnValidar.addEventListener('click', () => {
+            const telefone = telefoneInput.value.trim(); // Pega o valor e remove espaços extras
+
+            if (telefone === '') {
+                resultadoParagrafo.textContent = 'Por favor, digite um número de telefone.';
+                resultadoParagrafo.className = 'invalido';
+                resultadoParagrafo.style.display = 'block';
+                return;
+            }
+
+            // Testa o telefone contra a expressão regular
+            if (regexTelefone.test(telefone)) {
+                resultadoParagrafo.textContent = `"${telefone}" é um número de telefone VÁLIDO.`;
+                resultadoParagrafo.className = 'valido';
+            } else {
+                resultadoParagrafo.textContent = `"${telefone}" é um número de telefone INVÁLIDO.`;
+                resultadoParagrafo.className = 'invalido';
+            }
+            resultadoParagrafo.style.display = 'block'; // Exibe o resultado
+        });
+
+        // Opcional: Esconder o resultado ao digitar novamente
+        telefoneInput.addEventListener('input', () => {
+            resultadoParagrafo.style.display = 'none';
+            resultadoParagrafo.textContent = '';
+        });
+    </script>
+</body>
+</html>

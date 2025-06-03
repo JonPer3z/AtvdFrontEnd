@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Contatos</title>
+    <style>
+        /* Estilos básicos para uma interface mais organizada e agradável */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        div.section {
+            background-color: #fff;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="tel"], input[type="email"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Inclui padding e borda na largura total */
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745; /* Cor para adicionar/confirmar */
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-right: 10px; /* Espaçamento entre botões */
+        }
+        button:hover { background-color: #218838; }
+        .edit-button { background-color: #ffc107; color: #333; }
+        .edit-button:hover { background-color: #e0a800; }
+        .delete-button { background-color: #dc3545; }
+        .delete-button:hover { background-color: #c82333; }
+        .search-button, .sort-button { background-color: #6c757d; }
+        .search-button:hover, .sort-button:hover { background-color: #5a6268; }
+
+        .contact-list {
+            list-style: none; /* Remove marcadores de lista padrão */
+            padding: 0;
+        }
+        .contact-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e6ea;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Permite que os itens quebrem linha em telas pequenas */
+        }
+        .contact-info {
+            flex-grow: 1; /* Permite que o texto do contato ocupe o espaço disponível */
+        }
+        .contact-info strong {
+            font-size: 1.1em;
+            color: #0056b3;
+        }
+        .contact-actions {
+            margin-left: 15px; /* Espaço entre info e botões */
+            display: flex;
+            gap: 8px; /* Espaçamento entre os botões de ação */
+        }
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none; /* Inicia oculto */
+        }
+        .info-message {
+            color: #004085;
+            background-color: #cce5ff;
+            border: 1px solid #b8daff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none; /* Inicia oculto */
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Minha Agenda de Contatos</h1>
+
+    <div id="messageDisplay" class="error-message"></div>
+
+    <div class="section">
+        <h2 id="formTitle">Adicionar Novo Contato</h2>
+        <label for="contactName">Nome:</label>
+        <input type="text" id="contactName" placeholder="Nome Completo">
+
+        <label for="contactPhone">Telefone:</label>
+        <input type="tel" id="contactPhone" placeholder="(XX) XXXXX-XXXX">
+
+        <label for="contactEmail">E-mail:</label>
+        <input type="email" id="contactEmail" placeholder="email@exemplo.com">
+        
+        <input type="hidden" id="originalContactName"> 
+
+        <button id="btnAddUpdateContact">Adicionar Contato</button>
+        <button id="btnCancelEdit" class="hidden">Cancelar Edição</button>
+    </div>
+
+    <div class="section">
+        <h2>Pesquisar e Ordenar</h2>
+        <label for="searchName">Pesquisar por Nome:</label>
+        <input type="text" id="searchName" placeholder="Digite o nome para pesquisar">
+        <button id="btnSearch" class="search-button">Pesquisar</button>
+        <button id="btnSort" class="sort-button">Ordenar Alfabeticamente</button>
+    </div>
+
+    <div class="section">
+        <h2>Meus Contatos</h2>
+        <ul id="contactList" class="contact-list">
+            <p id="noContactsMessage">Nenhum contato cadastrado ainda.</p>
+        </ul>
+    </div>
+
+    <script src="JS/contato.js"></script>
+    <script src="JS/agenda.js"></script>
+    <script src="JS/agenda.js"></script> 
+    
+</body>
+</html>

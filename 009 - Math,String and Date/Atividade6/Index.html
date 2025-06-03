@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qual é o Dia da Semana?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px); /* Ajusta largura para padding e borda */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            text-align: center; /* Centraliza o texto digitado */
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        .resultado-box {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            background-color: #eaf6ff;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .resultado-box p {
+            margin: 0;
+            font-size: 1.5em;
+            color: #0056b3;
+            font-weight: bold;
+        }
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none; /* Inicia oculto */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Descubra o Dia da Semana</h1>
+
+        <label for="dataInput">Digite uma data (DD/MM/YY):</label>
+        <input type="text" id="dataInput" placeholder="Ex: 03/06/25">
+
+        <button id="btnVerificarDia">Verificar Dia da Semana</button>
+
+        <p id="errorMessage" class="error-message"></p>
+
+        <div class="resultado-box">
+            <p id="resultado">Dia da semana: </p>
+        </div>
+    </div>
+
+    <script>
+        // Array com os nomes dos dias da semana (índices 0 a 6)
+        const nomesDiasSemana = [
+            "Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
+            "Quinta-feira", "Sexta-feira", "Sábado"
+        ];
+
+        // Acessa os elementos HTML
+        const dataInput = document.getElementById('dataInput');
+        const btnVerificarDia = document.getElementById('btnVerificarDia');
+        const resultadoParagrafo = document.getElementById('resultado');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Função para exibir mensagens de erro
+        function showErrorMessage(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 4000);
+        }
+
+        // Adiciona um ouvinte de evento para o clique do botão
+        btnVerificarDia.addEventListener('click', () => {
+            const dataString = dataInput.value.trim();
+
+            // 1. Validação básica do formato
+            const regex = /^(\d{2})\/(\d{2})\/(\d{2})$/; // DD/MM/YY
+            const match = dataString.match(regex);
+
+            if (!match) {
+                showErrorMessage('Formato de data inválido. Use DD/MM/YY (Ex: 03/06/25).');
+                resultadoParagrafo.textContent = 'Dia da semana: ';
+                return;
+            }
+
+            // Extrai dia, mês e ano do regex
+            let dia = parseInt(match[1], 10);
+            let mes = parseInt(match[2], 10);
+            let anoCurto = parseInt(match[3], 10);
+
+            // 2. Determina o século para o ano "YY"
+            // Esta lógica é uma heurística simples para inferir o século.
+            // Para "YY", anos <= 24 (como 2024) são do século 21 (20xx),
+            // anos > 24 (como 1925) seriam do século 20 (19xx).
+            // Para simplificar e dado o contexto atual, vamos considerar apenas o século 21 para 00-99.
+            // O ideal seria um campo de ano completo ou um picker de data.
+            let anoCompleto;
+            if (anoCurto >= 0 && anoCurto <= 99) { // Garante que o ano curto está em um range válido
+                // Se o ano curto for menor ou igual ao ano atual (2025) - 2000, considera 20xx
+                // Ex: 25 -> 2025. 24 -> 2024.
+                // Se for maior, pode ser do século passado.
+                // Mas para este exercício, vamos considerar a maioria como 20xx
+                anoCompleto = 2000 + anoCurto;
+            } else {
+                // Caso o regex não pegue corretamente ou haja um erro inesperado
+                showErrorMessage('Erro ao determinar o ano. Verifique a data.');
+                resultadoParagrafo.textContent = 'Dia da semana: ';
+                return;
+            }
+
+
+            // 3. Validação dos valores de dia e mês
+            if (mes < 1 || mes > 12) {
+                showErrorMessage('Mês inválido. O mês deve ser entre 01 e 12.');
+                resultadoParagrafo.textContent = 'Dia da semana: ';
+                return;
+            }
+            if (dia < 1 || dia > 31) { // Validação básica, não considera dias por mês ainda
+                 showErrorMessage('Dia inválido. O dia deve ser entre 01 e 31.');
+                 resultadoParagrafo.textContent = 'Dia da semana: ';
+                 return;
+            }
+
+            // Cria um objeto Date:
+            // Lembre-se: o mês em JavaScript é de 0 a 11 (Janeiro = 0, Dezembro = 11).
+            const dataObjeto = new Date(anoCompleto, mes - 1, dia);
+
+            // Validação extra: O objeto Date pode criar uma data inválida sem erro,
+            // então checamos se o dia e mês "voltaram" para os valores que passamos.
+            // Isso acontece se, por exemplo, passarmos 31/02/2024 (que vira 02/03/2024).
+            if (dataObjeto.getDate() !== dia || (dataObjeto.getMonth() + 1) !== mes || dataObjeto.getFullYear() !== anoCompleto) {
+                showErrorMessage('Data inválida (ex: 31 de fevereiro). Verifique o dia e o mês.');
+                resultadoParagrafo.textContent = 'Dia da semana: ';
+                return;
+            }
+
+
+            // 4. Obtém o número do dia da semana (0 para Domingo, 1 para Segunda, etc.)
+            const diaSemanaNumero = dataObjeto.getDay();
+
+            // 5. Mapeia o número para o nome do dia da semana
+            const nomeDiaSemana = nomesDiasSemana[diaSemanaNumero];
+
+            // 6. Exibe o resultado
+            resultadoParagrafo.textContent = `Dia da semana: ${nomeDiaSemana}`;
+        });
+
+        // Opcional: Limpar o resultado e mensagens ao digitar novamente
+        dataInput.addEventListener('input', () => {
+            resultadoParagrafo.textContent = 'Dia da semana: ';
+            errorMessage.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
